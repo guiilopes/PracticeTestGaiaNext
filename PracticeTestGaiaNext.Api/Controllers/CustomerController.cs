@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PracticeTestGaiaNext.Api.Data;
 using PracticeTestGaiaNext.Api.Enums;
 using PracticeTestGaiaNext.Api.Model;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PracticeTestGaiaNext.Api.Controllers
 {
@@ -20,16 +23,32 @@ namespace PracticeTestGaiaNext.Api.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<Customer>> GetCustomers()
+        public async Task<IActionResult> GetCustomers()
         {
-            return _dataContext.Customers.ToList();
+            try
+            {
+                return Ok(await _dataContext.Customers.ToListAsync());
+            }
+            catch(System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível exibir os clientes!");   
+            }
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<Customer> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return _dataContext.Customers.FirstOrDefault(x => x.Id == id);
+            try
+            {
+                return Ok(await _dataContext.Customers.FirstOrDefaultAsync(x => x.Id == id));
+
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível exibir o cliente código {id}!");
+            }
+
         }
 
         // POST api/values
