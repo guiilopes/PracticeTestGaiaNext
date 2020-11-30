@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PracticeTestGaiaNext.Domain.Repositories;
 using PracticeTestGaiaNext.Infra.Data;
+using PracticeTestGaiaNext.Infra.Repositories;
 
 namespace PracticeTestGaiaNext.Api
 {
@@ -21,6 +23,8 @@ namespace PracticeTestGaiaNext.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

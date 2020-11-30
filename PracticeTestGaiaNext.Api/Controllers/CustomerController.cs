@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PracticeTestGaiaNext.Infra.Data;
+using PracticeTestGaiaNext.Domain.Entities;
+using PracticeTestGaiaNext.Domain.Repositories;
 using System.Threading.Tasks;
 
 namespace PracticeTestGaiaNext.Api.Controllers
@@ -10,20 +10,19 @@ namespace PracticeTestGaiaNext.Api.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly DataContext _dataContext;
+        private readonly ICustomerRepository _repository;
 
-        public CustomerController(DataContext dataContext)
+        public CustomerController(ICustomerRepository repository)
         {
-            _dataContext = dataContext;
+            _repository = repository;
         }
 
-        // GET api/values
         [HttpGet]
         public async Task<IActionResult> GetCustomers()
         {
             try
             {
-                return Ok(await _dataContext.Customers.ToListAsync());
+                return Ok(await _repository.GetCustomersAsync());
             }
             catch (System.Exception)
             {
@@ -31,13 +30,12 @@ namespace PracticeTestGaiaNext.Api.Controllers
             }
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                return Ok(await _dataContext.Customers.FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await _repository.GetCustomersAsyncById(id));
 
             }
             catch (System.Exception)
@@ -47,22 +45,66 @@ namespace PracticeTestGaiaNext.Api.Controllers
 
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post(Customer customer)
         {
+            try
+            {
+                _repository.Add(customer);
+
+                if (await _repository.SaveChangesAsync())
+                    return Created($"/api/customer/{customer.Id}", customer);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível inserir o cliente código {customer.Id}!");
+            }
+
+            return BadRequest();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, Customer customer)
         {
+            try
+            {
+                var reponse = await _repository.GetCustomersAsyncById(id);
+
+                if (reponse == null) return NotFound();
+
+                _repository.Update(customer);
+
+                if (await _repository.SaveChangesAsync())
+                    return Created($"/api/customer/{customer.Id}", customer);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível salvar o cliente código {customer.Id}!");
+            }
+
+            return BadRequest();
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id, Customer customer)
         {
+            try
+            {
+                var reponse = await _repository.GetCustomersAsyncById(id);
+
+                if (reponse == null) return NotFound();
+
+                _repository.Delete(customer);
+
+                if (await _repository.SaveChangesAsync())
+                    return Ok();
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível eliminar o cliente código {customer.Id}!");
+            }
+
+            return BadRequest();
         }
     }
 }
