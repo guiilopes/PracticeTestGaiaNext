@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Customer } from '../_models/customer';
+import { CustomerService } from '../_services/customer.service';
 
 @Component({
   selector: 'app-customers',
@@ -7,7 +8,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
-
   _filterList: string;
 
   get filterList(): string {
@@ -16,31 +16,38 @@ export class CustomersComponent implements OnInit {
 
   set filterList(value: string) {
     this._filterList = value;
-    this.eventFilterCustomers = this.filterList ? this.returnFilterList(this.filterList) : this.customers;
+    this.eventFilterCustomers = this.filterList
+      ? this.returnFilterList(this.filterList)
+      : this.customers;
   }
 
-  eventFilterCustomers: any = [];
-  customers: any = [];
+  eventFilterCustomers: Customer[] = [];
+  customers: Customer[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private customerService: CustomerService) {}
 
   ngOnInit() {
-    this.getCustormers();
+    this.getCustomers();
   }
 
-  returnFilterList(filterBy: string): any {
+  returnFilterList(filterBy: string): Customer[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.customers.filter(
-      customer => customer.name.toLocaleLowerCase().indexOf(filterBy) !== -1
+      (customer) => customer.name.toLocaleLowerCase().indexOf(filterBy) !== -1
     );
   }
 
-  getCustormers() {
-    this.http.get('https://localhost:5001/api/customer').subscribe(response => {
-      this.customers = response;
-    }, error => {
-    console.log(error);
-    });
+  getCustomers() {
+    this.customerService.getCustomers().subscribe(
+      // tslint:disable-next-line: variable-name
+      (_customer: Customer[]) => {
+        this.customers = _customer;
+        this.eventFilterCustomers = this.customers;
+        console.log(_customer);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
-
 }
