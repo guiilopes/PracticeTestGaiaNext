@@ -1,12 +1,19 @@
-<form class="form-inline">
-  <div class="form-group mb-2">
-    <input type="text" 
-      class="form-control mr-2" 
-      placeholder="Buscar"
-      [(ngModel)]="filterList" [ngModelOptions]="{standalone: true}">
-    <button class="btn btn-outline-success">Buscar</button>
+<div class="d-flex">
+  <div class="form-inline mr-auto">
+    <div class="form-group mb-2">
+      <input type="text" class="form-control mr-2" placeholder="Buscar" [(ngModel)]="filterList"
+        [ngModelOptions]="{ standalone: true }" />
+      <button class="btn btn-info">Buscar</button>
+    </div>
   </div>
-</form>
+  <div>
+    <button class="btn btn-primary" (click)="newCustomer(template)">
+      <i class="fa fa-plus-circle"></i>&nbsp;
+      Novo cliente
+    </button>
+  </div>
+</div>
+
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
@@ -18,19 +25,28 @@
   </thead>
   <tbody *ngIf="customers && customers.length">
     <tr *ngFor="let customer of eventFilterCustomers">
-      <td>{{customer.id}}</td>
-      <td>{{customer.name}}</td>
-      <td>{{customer.companySize == 0 ? 'Pequena' : (customer.companySize == 1 ? 'Média' : 'Grande')}}</td>
-       <td>
+      <td>{{ customer.id }}</td>
+      <td>{{ customer.name }}</td>
+      <td>
+        {{
+          customer.companySize == 0
+            ? "Pequena"
+            : customer.companySize == 1
+            ? "Média"
+            : "Grande"
+        }}
+      </td>
+      <td>
         <div class="btn-group">
-          <button class="btn btn-sm btn-success" tooltip="Editar" (click)="openModal(template)">
+          <button class="btn btn-sm btn-info" tooltip="Editar" (click)="editCustomer(customer, template)">
             <i class="fa fa-edit"></i>
           </button>
+          &nbsp;
           <button class="btn btn-sm btn-danger" tooltip="Excluir">
             <i class="fa fa-eraser"></i>
-          </button> 
+          </button>
         </div>
-      </td> 
+      </td>
     </tr>
   </tbody>
   <tfoot *ngIf="!customers.length">
@@ -40,14 +56,59 @@
   </tfoot>
 </table>
 
-<ng-template #template>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">Modal</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>)
+<div bsModal #template="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Modal</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="template.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="registerForm">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label>Nome</label>
+              <input type="text" class="form-control" [ngClass]="{
+                  'is-invalid':
+                    registerForm.get('name').errors && registerForm.get('name').touched
+                }" formControlName="name" />
+              <div *ngIf="registerForm.get('name').hasError('required') &&
+                  registerForm.get('name').touched" class="invalid-feedback">
+                Nome é obrigatório
+              </div>
+              <div *ngIf="registerForm.get('name').hasError('minlength') &&
+                  registerForm.get('name').touched" class="invalid-feedback">
+                Nome deve ter no mínimo 3 caracteres
+              </div>
+              <div *ngIf="registerForm.get('name').hasError('maxlength') &&
+                  registerForm.get('name').touched" class="invalid-feedback">
+                Nome deve ter no máximo 50 caracteres
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label>Porte</label>
+              <select class="form-control" [ngClass]="{'is-invalid':
+              registerForm.get('companySize').errors &&
+              registerForm.get('companySize').touched}" formControlName="companySize">
+                <option value="0">Pequena</option>
+                <option value="1">Média</option>
+                <option value="2">Grande</option>
+              </select>
+        
+              <div class="invalid-feedback">O porte da empresa é obrigatório</div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="template.hide()">Fechar</button>
+        &nbsp;
+        <button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="saveCustomer(template)">Salvar</button>
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    This is a modal.
-  </div>
-</ng-template>
+</div>

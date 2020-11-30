@@ -18,4 +18,12 @@ export class CustomerService {
   getCustomerById(id: number): Observable<Customer> {
     return this.http.get<Customer>(`${this.baseURL}/${id}`);
   }
+
+  postCustomer(customer: Customer) {
+    return this.http.post(`${this.baseURL}`, customer);
+  }
+
+  putCustomer(customer: Customer) {
+    return this.http.put(`${this.baseURL}/${customer.id}`, customer);
+  }
 }

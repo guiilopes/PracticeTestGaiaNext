@@ -1,4 +1,11 @@
+import { templateJitUrl } from '@angular/compiler';
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Customer } from '../_models/customer';
 import { CustomerService } from '../_services/customer.service';
@@ -12,12 +19,15 @@ export class CustomersComponent implements OnInit {
   filter = '';
   eventFilterCustomers: Customer[] = [];
   customers: Customer[] = [];
-  modalRef: BsModalRef;
+  customer: Customer;
+  registerForm: FormGroup;
+  saveMode = 'post';
 
   constructor(
-      private customerService: CustomerService
-    , private modalService: BsModalService
-    ) {}
+    private customerService: CustomerService,
+    private modalService: BsModalService,
+    private formBuilder: FormBuilder
+  ) {}
 
   get filterList(): string {
     return this.filter;
@@ -30,12 +40,72 @@ export class CustomersComponent implements OnInit {
       : this.customers;
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+  ngOnInit() {
+    this.validation();
+    this.getCustomers();
   }
 
-  ngOnInit() {
-    this.getCustomers();
+  validation() {
+    this.registerForm = this.formBuilder.group({
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      companySize: ['', Validators.required],
+    });
+  }
+
+  openModal(template: any) {
+    this.registerForm.reset();
+    template.show();
+  }
+
+  newCustomer(template: any) {
+    this.saveMode = 'post';
+    this.openModal(template);
+  }
+
+  editCustomer(customer: Customer, template: any) {
+    this.saveMode = 'put';
+    this.openModal(template);
+    this.customer = customer;
+    this.registerForm.patchValue(customer);
+  }
+
+  saveCustomer(template: any) {
+    if (this.registerForm.valid) {
+      if (this.saveMode === 'post') {
+        this.customer = Object.assign({}, this.registerForm.value);
+        this.customerService.postCustomer(this.customer).subscribe(
+          (newCustomer: Customer) => {
+            console.log(newCustomer);
+            template.hide();
+            this.getCustomers();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        this.customer = Object.assign(
+          { id: this.customer.id },
+          this.registerForm.value
+        );
+        this.customerService.putCustomer(this.customer).subscribe(
+          () => {
+            template.hide();
+            this.getCustomers();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    }
   }
 
   returnFilterList(filterBy: string): Customer[] {
