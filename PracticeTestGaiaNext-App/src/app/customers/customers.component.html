@@ -1,6 +1,9 @@
 <form class="form-inline">
   <div class="form-group mb-2">
-    <input type="text" class="form-control mr-2" placeholder="Buscar">
+    <input type="text" 
+      class="form-control mr-2" 
+      placeholder="Buscar"
+      [(ngModel)]="filterList" [ngModelOptions]="{standalone: true}">
     <button class="btn btn-outline-success">Buscar</button>
   </div>
 </form>
@@ -12,11 +15,16 @@
       <th>Company Size</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
+  <tbody *ngIf="customers && customers.length">
+    <tr *ngFor="let customer of eventFilterCustomers">
+      <td>{{customer.id}}</td>
+      <td>{{customer.name}}</td>
+      <td>{{customer.companySize == 0 ? 'Pequena' : (customer.companySize == 1 ? 'Média' : 'Grande')}}</td>
     </tr>
   </tbody>
+  <tfoot *ngIf="!customers.length">
+    <td colspan="7" class="text-center">
+      <h6>Nenhuma informação a ser exibida.</h6>
+    </td>
+  </tfoot>
 </table>

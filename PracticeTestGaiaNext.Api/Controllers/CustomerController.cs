@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PracticeTestGaiaNext.Api.Data;
-using PracticeTestGaiaNext.Api.Enums;
-using PracticeTestGaiaNext.Api.Model;
-using System.Collections.Generic;
-using System.Linq;
+using PracticeTestGaiaNext.Infra.Data;
 using System.Threading.Tasks;
 
 namespace PracticeTestGaiaNext.Api.Controllers
@@ -29,9 +25,9 @@ namespace PracticeTestGaiaNext.Api.Controllers
             {
                 return Ok(await _dataContext.Customers.ToListAsync());
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível exibir os clientes!");   
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível exibir os clientes!");
             }
         }
 

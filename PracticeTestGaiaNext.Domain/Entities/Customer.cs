@@ -1,6 +1,6 @@
-﻿using PracticeTestGaiaNext.Api.Enums;
+﻿using PracticeTestGaiaNext.Domain.Enums;
 
-namespace PracticeTestGaiaNext.Api.Model
+namespace PracticeTestGaiaNext.Domain.Entities
 {
     public class Customer
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PracticeTestGaiaNext.Api.Data;
+using PracticeTestGaiaNext.Infra.Data;
 
 namespace PracticeTestGaiaNext.Api
 {

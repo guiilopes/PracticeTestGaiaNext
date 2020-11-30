@@ -5,6 +5,31 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeTestGaiaNext.Api", "PracticeTestGaiaNext.Api\PracticeTestGaiaNext.Api.csproj", "{AC9FB4E9-6B0E-41E9-BA99-E628E6EE536E}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "PracticeTestGaiaNext-App", "PracticeTestGaiaNext-App\", "{E10858DF-9D00-46AF-9118-79E45EEDB45F}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54387"
+		Debug.AspNetCompiler.PhysicalPath = "PracticeTestGaiaNext-App\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54387\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54387"
+		Release.AspNetCompiler.PhysicalPath = "PracticeTestGaiaNext-App\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54387\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "54387"
+		SlnRelativePath = "PracticeTestGaiaNext-App\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeTestGaiaNext.Infra", "PracticeTestGaiaNext.Infra\PracticeTestGaiaNext.Infra.csproj", "{659A213D-852E-4B62-BA1C-654F1106E599}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeTestGaiaNext.Domain", "PracticeTestGaiaNext.Domain\PracticeTestGaiaNext.Domain.csproj", "{A992303F-F3DF-4D51-B9C2-74BA4A87DE3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +40,18 @@ Global
 		{AC9FB4E9-6B0E-41E9-BA99-E628E6EE536E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC9FB4E9-6B0E-41E9-BA99-E628E6EE536E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC9FB4E9-6B0E-41E9-BA99-E628E6EE536E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E10858DF-9D00-46AF-9118-79E45EEDB45F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E10858DF-9D00-46AF-9118-79E45EEDB45F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E10858DF-9D00-46AF-9118-79E45EEDB45F}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{E10858DF-9D00-46AF-9118-79E45EEDB45F}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{659A213D-852E-4B62-BA1C-654F1106E599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{659A213D-852E-4B62-BA1C-654F1106E599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{659A213D-852E-4B62-BA1C-654F1106E599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{659A213D-852E-4B62-BA1C-654F1106E599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A992303F-F3DF-4D51-B9C2-74BA4A87DE3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A992303F-F3DF-4D51-B9C2-74BA4A87DE3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A992303F-F3DF-4D51-B9C2-74BA4A87DE3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A992303F-F3DF-4D51-B9C2-74BA4A87DE3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

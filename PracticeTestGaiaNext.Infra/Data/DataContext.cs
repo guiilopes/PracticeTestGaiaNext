@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PracticeTestGaiaNext.Api.Model;
+using PracticeTestGaiaNext.Domain.Entities;
 
-namespace PracticeTestGaiaNext.Api.Data
+namespace PracticeTestGaiaNext.Infra.Data
 {
     public class DataContext : DbContext
     {

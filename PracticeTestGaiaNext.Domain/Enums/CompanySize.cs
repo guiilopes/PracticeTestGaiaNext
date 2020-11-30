@@ -1,4 +1,4 @@
-﻿namespace PracticeTestGaiaNext.Api.Enums
+﻿namespace PracticeTestGaiaNext.Domain.Enums
 {
     public enum CompanySize
     {

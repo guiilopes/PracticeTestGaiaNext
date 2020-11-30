@@ -8,12 +8,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CustomersComponent implements OnInit {
 
-  customers: any;
+  _filterList: string;
+
+  get filterList(): string {
+    return this._filterList;
+  }
+
+  set filterList(value: string) {
+    this._filterList = value;
+    this.eventFilterCustomers = this.filterList ? this.returnFilterList(this.filterList) : this.customers;
+  }
+
+  eventFilterCustomers: any = [];
+  customers: any = [];
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.getCustormers();
+  }
+
+  returnFilterList(filterBy: string): any {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.customers.filter(
+      customer => customer.name.toLocaleLowerCase().indexOf(filterBy) !== -1
+    );
   }
 
   getCustormers() {
