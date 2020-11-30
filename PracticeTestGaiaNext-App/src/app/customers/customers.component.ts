@@ -22,7 +22,8 @@ export class CustomersComponent implements OnInit {
   customer: Customer;
   registerForm: FormGroup;
   saveMode = 'post';
-
+  bodyDeleteCustomer = '';
+  
   constructor(
     private customerService: CustomerService,
     private modalService: BsModalService,
@@ -74,6 +75,23 @@ export class CustomersComponent implements OnInit {
     this.openModal(template);
     this.customer = customer;
     this.registerForm.patchValue(customer);
+  }
+
+  deleteCustomer(customer: Customer, template: any) {
+    this.openModal(template);
+    this.customer = customer;
+    this.bodyDeleteCustomer = `Deseja eliminar o cliente: ${customer.id} - ${customer.name} ?`;
+  }
+
+  confirmeDelete(template: any) {
+    this.customerService.deleteCustomer(this.customer.id).subscribe(
+      () => {
+          template.hide();
+          this.getCustomers();
+        }, error => {
+          console.log(error);
+        }
+    );
   }
 
   saveCustomer(template: any) {

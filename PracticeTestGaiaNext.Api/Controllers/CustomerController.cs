@@ -86,13 +86,15 @@ namespace PracticeTestGaiaNext.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id, Customer customer)
+        public async Task<IActionResult> Delete(int id)
         {
+            Customer customer = null;
+
             try
             {
-                var reponse = await _repository.GetCustomersAsyncById(id);
+                customer = await _repository.GetCustomersAsyncById(id);
 
-                if (reponse == null) return NotFound();
+                if (customer == null) return NotFound();
 
                 _repository.Delete(customer);
 

@@ -26,4 +26,8 @@ export class CustomerService {
   putCustomer(customer: Customer) {
     return this.http.put(`${this.baseURL}/${customer.id}`, customer);
   }
+
+  deleteCustomer(id: number) {
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
 }
