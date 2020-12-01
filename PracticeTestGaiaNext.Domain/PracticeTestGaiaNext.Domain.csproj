@@ -12,4 +12,8 @@
     <OutputPath>C:\Git\PracticeTestGaiaNext\PracticeTestGaiaNext.Api\bin\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="prmToolkit.NotificationPattern" Version="1.1.3" />
+  </ItemGroup>
+
 </Project>
