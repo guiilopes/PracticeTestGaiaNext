@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PracticeTestGaiaNext.Api.Dtos;
 using PracticeTestGaiaNext.Domain.Entities;
 using PracticeTestGaiaNext.Domain.Repositories;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PracticeTestGaiaNext.Api.Controllers
@@ -11,10 +14,12 @@ namespace PracticeTestGaiaNext.Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerRepository _repository;
+        private readonly IMapper _iMapper;
 
-        public CustomerController(ICustomerRepository repository)
+        public CustomerController(ICustomerRepository repository, IMapper iMapper)
         {
             _repository = repository;
+            _iMapper = iMapper;
         }
 
         [HttpGet]
@@ -22,11 +27,15 @@ namespace PracticeTestGaiaNext.Api.Controllers
         {
             try
             {
-                return Ok(await _repository.GetCustomersAsync());
+                var customers = await _repository.GetCustomersAsync();
+
+                var results = _iMapper.Map<IEnumerable<CustomerDto>>(customers);
+
+                return Ok(results);
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível exibir os clientes!");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível exibir os clientes! Ex: {ex.Message}" );
             }
         }
 
@@ -35,8 +44,11 @@ namespace PracticeTestGaiaNext.Api.Controllers
         {
             try
             {
-                return Ok(await _repository.GetCustomersAsyncById(id));
+                var customer = await _repository.GetCustomersAsyncById(id);
 
+                var results = _iMapper.Map<CustomerDto>(customer);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -46,40 +58,44 @@ namespace PracticeTestGaiaNext.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Customer customer)
+        public async Task<IActionResult> Post(CustomerDto customerDto)
         {
             try
             {
+                var customer = _iMapper.Map<Customer>(customerDto);
+
                 _repository.Add(customer);
 
                 if (await _repository.SaveChangesAsync())
-                    return Created($"/api/customer/{customer.Id}", customer);
+                    return Created($"/api/customer/{customer.Id}", _iMapper.Map<CustomerDto>(customer));
             }
             catch (System.Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível inserir o cliente código {customer.Id}!");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível inserir o cliente código {customerDto.Id}!");
             }
 
             return BadRequest();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Customer customer)
+        public async Task<IActionResult> Put(int id, CustomerDto customerDto)
         {
             try
             {
-                var reponse = await _repository.GetCustomersAsyncById(id);
+                var customer = await _repository.GetCustomersAsyncById(id);
 
-                if (reponse == null) return NotFound();
+                if (customer == null) return NotFound();
+
+                _iMapper.Map(customerDto, customer);
 
                 _repository.Update(customer);
 
                 if (await _repository.SaveChangesAsync())
-                    return Created($"/api/customer/{customer.Id}", customer);
+                    return Created($"/api/customer/{customerDto.Id}", _iMapper.Map<CustomerDto>(customer));
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível salvar o cliente código {customer.Id}!");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Não foi possível salvar o cliente código {customerDto.Id}! Ex:{ex.Message}");
             }
 
             return BadRequest();

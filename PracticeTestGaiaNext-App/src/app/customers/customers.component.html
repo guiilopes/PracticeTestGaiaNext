@@ -17,10 +17,10 @@
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
-      <th>#</th>
-      <th>Nome</th>
-      <th>Porte</th>
-      <th>Ações</th>
+      <th style="width: 10%">#</th>
+      <th style="width: 55%">Nome</th>
+      <th style="width: 25%">Porte</th>
+      <th style="width: 10%">Ações</th>
     </tr>
   </thead>
   <tbody *ngIf="customers && customers.length">
@@ -60,7 +60,7 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Modal</h4>
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Incluir novo cliente</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="template.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -118,7 +118,7 @@
   		<div class="modal-content">
     		<div class="modal-header">
       			<h4 class="modal-title pull-left">
-        			Deletando Evento
+        			Cliente
       			</h4>
       			<button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
         			<span aria-hidden="true">&times;</span>
@@ -129,10 +129,10 @@
     		</div>    
     		<div class="modal-footer btn-group d-flex">      
       			<button type="button" class="btn btn-primary" (click)="confirm.hide()">
-        			CENCELAR
+        			Cancelar
       			</button>
       			<button type="button" class="btn btn-danger" (click)="confirmeDelete(confirm)">
-          			DELETAR
+          			Apagar
         		</button>
     		</div>
   		</div>
