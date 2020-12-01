@@ -93,7 +93,7 @@ export class CustomersComponent implements OnInit {
         this.toastr.success('Cliente eliminado.');
       },
       (error) => {
-        this.toastr.error('Não foi possível eliminar.');
+        this.toastr.error(`Não foi possível eliminar. Erro: ${error}`);
       }
     );
   }
@@ -109,7 +109,7 @@ export class CustomersComponent implements OnInit {
             this.toastr.success('Cliente inserido.');
           },
           (error) => {
-            this.toastr.error('Não foi possível salvar.');
+            this.toastr.error(`Não foi possível inserir. Erro: ${error}`);
           }
         );
       } else {
@@ -124,7 +124,7 @@ export class CustomersComponent implements OnInit {
             this.toastr.success('Cliente editado.');
           },
           (error) => {
-            this.toastr.error('Não foi possível editar.');
+            this.toastr.error(`Não foi possível editar. Erro: ${error}`);
           }
         );
       }
@@ -145,7 +145,7 @@ export class CustomersComponent implements OnInit {
         this.eventFilterCustomers = this.customers;
       },
       (error) => {
-        this.toastr.error('Não foi possível carregar os clientes.');
+        this.toastr.error(`Não foi possível carregar os clientes. Erro: ${error}`);
       }
     );
   }
