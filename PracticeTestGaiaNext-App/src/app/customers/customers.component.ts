@@ -9,6 +9,7 @@ import {
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Customer } from '../_models/customer';
 import { CustomerService } from '../_services/customer.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-customers',
@@ -23,11 +24,12 @@ export class CustomersComponent implements OnInit {
   registerForm: FormGroup;
   saveMode = 'post';
   bodyDeleteCustomer = '';
-  
+
   constructor(
     private customerService: CustomerService,
     private modalService: BsModalService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService
   ) {}
 
   get filterList(): string {
@@ -86,11 +88,13 @@ export class CustomersComponent implements OnInit {
   confirmeDelete(template: any) {
     this.customerService.deleteCustomer(this.customer.id).subscribe(
       () => {
-          template.hide();
-          this.getCustomers();
-        }, error => {
-          console.log(error);
-        }
+        template.hide();
+        this.getCustomers();
+        this.toastr.success('Cliente eliminado.');
+      },
+      (error) => {
+        this.toastr.error('Não foi possível eliminar.');
+      }
     );
   }
 
@@ -100,12 +104,12 @@ export class CustomersComponent implements OnInit {
         this.customer = Object.assign({}, this.registerForm.value);
         this.customerService.postCustomer(this.customer).subscribe(
           (newCustomer: Customer) => {
-            console.log(newCustomer);
             template.hide();
             this.getCustomers();
+            this.toastr.success('Cliente inserido.');
           },
           (error) => {
-            console.log(error);
+            this.toastr.error('Não foi possível salvar.');
           }
         );
       } else {
@@ -117,9 +121,10 @@ export class CustomersComponent implements OnInit {
           () => {
             template.hide();
             this.getCustomers();
+            this.toastr.success('Cliente editado.');
           },
           (error) => {
-            console.log(error);
+            this.toastr.error('Não foi possível editar.');
           }
         );
       }
@@ -138,10 +143,9 @@ export class CustomersComponent implements OnInit {
       (_customer: Customer[]) => {
         this.customers = _customer;
         this.eventFilterCustomers = this.customers;
-        console.log(_customer);
       },
       (error) => {
-        console.log(error);
+        this.toastr.error('Não foi possível carregar os clientes.');
       }
     );
   }
